@@ -1,0 +1,122 @@
+// Enums for the core tables. Names are PascalCase in code and mapped to
+// snake_case Postgres types. Better Auth's `role` stays a plain string, so it has no enum.
+
+// student_profiles.careerLevel, jobs.experienceLevel
+enum CareerLevel {
+  INTERN
+  JUNIOR
+  MID
+  SENIOR
+
+  @@map("career_level")
+}
+
+// student_profiles.preferredRoleCategories (array), jobs.roleCategory
+enum RoleCategory {
+  BACKEND
+  FRONTEND
+  FULLSTACK
+  AI_ML
+  DEVOPS
+  MOBILE
+  QA
+  DATA
+  OTHER
+
+  @@map("role_category")
+}
+
+// student_profiles.preferredEmploymentTypes (array), jobs.employmentType
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+
+  @@map("employment_type")
+}
+
+// student_profiles.preferredWorkModes (array), jobs.workMode
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+
+  @@map("work_mode")
+}
+
+// student_profiles.expectedSalaryPeriod, jobs.salaryPeriod
+enum SalaryPeriod {
+  MONTHLY
+  YEARLY
+
+  @@map("salary_period")
+}
+
+// job_sources.kind
+enum JobSourceKind {
+  API
+  ATS_BOARD
+
+  @@map("job_source_kind")
+}
+
+// jobs.origin
+enum JobOrigin {
+  EXTERNAL
+  MANUAL
+
+  @@map("job_origin")
+}
+
+// jobs.status
+enum JobStatus {
+  ACTIVE
+  EXPIRED
+  REMOVED
+
+  @@map("job_status")
+}
+
+// jobs.visibility
+enum JobVisibility {
+  PRIVATE
+  PUBLIC
+
+  @@map("job_visibility")
+}
+
+// jobs.parseStatus
+enum ParseStatus {
+  PENDING
+  PARSED
+  FAILED
+  MANUAL
+
+  @@map("parse_status")
+}
+
+// applications.status, application_events.fromStatus / toStatus
+enum ApplicationStatus {
+  SAVED
+  CONSIDERING
+  APPLIED
+  INTERVIEW
+  OFFER
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+
+  @@map("application_status")
+}
+
+// application_events.type
+enum EventType {
+  STATUS_CHANGED
+  INTERVIEW_SCHEDULED
+  INTERVIEW_RESULT
+  CONTACT
+  NOTE
+
+  @@map("event_type")
+}
