@@ -1,0 +1,17 @@
+model JobSource {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  slug           String    @unique @db.VarChar(60)
+  name           String    @db.VarChar(120)
+  kind           String
+  baseUrl        String?   @map("base_url") @db.VarChar(500)
+  config         Json?
+  isEnabled      Boolean   @default(true) @map("is_enabled")
+  lastSyncedAt   DateTime? @map("last_synced_at") @db.Timestamptz(6)
+  lastSyncStatus String?   @map("last_sync_status") @db.VarChar(20)
+  lastSyncError  String?   @map("last_sync_error")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  jobs           Job[]
+
+  @@map("job_sources")
+}
