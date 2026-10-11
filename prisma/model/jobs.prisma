@@ -1,0 +1,58 @@
+model Job {
+  id                   String         @id @default(uuid(7)) @db.Uuid
+
+  // job.identity
+  origin               JobOrigin
+  sourceId             String?        @map("source_id") @db.Uuid
+  externalId           String?        @map("external_id") @db.VarChar(255)
+  createdByUserId      String?        @map("created_by_user_id") @db.Uuid
+  dedupHash            String?        @map("dedup_hash") @db.VarChar(64)
+
+  // job.description
+  title                String         @db.VarChar(255)
+  companyName          String         @map("company_name") @db.VarChar(255)
+  companyUrl           String?        @map("company_url") @db.VarChar(500)
+  locationText         String?        @map("location_text") @db.VarChar(255)
+  workMode             WorkMode?      @map("work_mode")
+  employmentType       EmploymentType? @map("employment_type")
+  description          String         @db.Text
+  requirements         String[]       @default([])
+  responsibilities     String[]       @default([])
+  educationRequirement String?        @map("education_requirement") @db.VarChar(255)
+  applyUrl             String?        @map("apply_url") @db.VarChar(1000)
+
+  // job.experience
+  roleCategory         RoleCategory?  @map("role_category")
+  experienceLevel      CareerLevel?   @map("experience_level")
+  minYears             Int?           @map("min_years") @db.SmallInt
+  maxYears             Int?           @map("max_years") @db.SmallInt
+
+  // job.salary
+  salaryMin            Int?           @map("salary_min")
+  salaryMax            Int?           @map("salary_max")
+  salaryCurrency       String?        @map("salary_currency") @db.VarChar(3)
+  salaryPeriod         SalaryPeriod?  @map("salary_period")
+
+  // job.dates
+  postedAt             DateTime?      @map("posted_at") @db.Timestamptz(6)
+  applicationDeadline  DateTime?      @map("application_deadline") @db.Timestamptz(6)
+
+  // job.state
+  status               JobStatus      @default(ACTIVE)
+  visibility           JobVisibility  @default(PRIVATE)
+  visibilityLocked     Boolean        @default(false) @map("visibility_locked")
+  parseStatus          ParseStatus    @default(PENDING) @map("parse_status")
+
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  source               JobSource?    @relation(fields: [sourceId], references: [id])
+
+  @@unique([sourceId, externalId])
+  @@index([dedupHash])
+  @@index([status, visibility, postedAt(sort: Desc)])
+  @@index([createdByUserId])
+  @@index([roleCategory, experienceLevel])
+  @@index([applicationDeadline])
+  @@map("jobs")
+}
