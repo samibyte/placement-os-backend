@@ -1,0 +1,12 @@
+model StudentSkill {
+  profileId String   @map("profile_id") @db.Uuid
+  skillId   String   @map("skill_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  profile StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, skillId])
+  @@index([skillId])
+  @@map("student_skills")
+}
