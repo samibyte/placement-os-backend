@@ -1,0 +1,24 @@
+model Application {
+  id           String            @id @default(uuid(7)) @db.Uuid
+  userId       String            @map("user_id") @db.Uuid
+  jobId        String            @map("job_id") @db.Uuid
+  status       ApplicationStatus @default(SAVED)
+  appliedAt    DateTime?         @map("applied_at") @db.Timestamptz(6)
+  resumeUrl    String?           @map("resume_url") @db.VarChar(1000)
+  contactName  String?           @map("contact_name") @db.VarChar(120)
+  contactEmail String?           @map("contact_email") @db.VarChar(255)
+  notes        String?           @db.Text
+  prepNotes    String?           @map("prep_notes") @db.Text
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // relations
+  job               Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applicationEvents ApplicationEvent[]
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@index([jobId])
+  @@index([status])
+  @@map("applications")
+}

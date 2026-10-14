@@ -1,0 +1,19 @@
+model JobMatchAnalysis {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  jobId         String   @map("job_id") @db.Uuid
+  score         Int      @db.SmallInt
+  breakdown     Json
+  aiExplanation Json?    @map("ai_explanation")
+  profileHash   String?  @map("profile_hash") @db.VarChar(64)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // relations
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([jobId])
+  @@index([userId])
+  @@map("job_match_analyses")
+}

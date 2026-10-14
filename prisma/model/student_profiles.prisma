@@ -1,0 +1,36 @@
+model StudentProfile {
+  id String @id @default(uuid(7)) @db.Uuid
+
+  // profile.identity
+  userId String @unique @map("user_id") @db.Uuid
+
+  // profile.preferences
+  careerLevel              CareerLevel?     @map("career_level")
+  preferredRoleCategories  RoleCategory[]   @default([]) @map("preferred_role_categories")
+  preferredWorkModes       WorkMode[]       @default([]) @map("preferred_work_modes")
+  preferredEmploymentTypes EmploymentType[] @default([]) @map("preferred_employment_types")
+  experienceYears          Decimal?         @map("experience_years") @db.Decimal(3, 1)
+  locationText             String?          @map("location_text") @db.VarChar(100)
+
+  // profile.salary
+  expectedSalaryMin      Int?          @map("expected_salary_min")
+  expectedSalaryMax      Int?          @map("expected_salary_max")
+  expectedSalaryCurrency String?       @map("expected_salary_currency") @db.VarChar(3)
+  expectedSalaryPeriod   SalaryPeriod? @map("expected_salary_period")
+
+  // profile.links
+  portfolioUrl String? @map("portfolio_url") @db.VarChar(500)
+  githubUrl    String? @map("github_url") @db.VarChar(500)
+  linkedinUrl  String? @map("linkedin_url") @db.VarChar(500)
+
+  // profile.timestamps
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // relations
+  studentSkills StudentSkill[]
+
+  @@index([userId])
+  @@index([careerLevel])
+  @@map("student_profiles")
+}
