@@ -7,12 +7,15 @@ import type { Request, Response } from 'express';
 const expressApp = express();
 const adapter = new ExpressAdapter(expressApp);
 
-// Cache the initialized app (warm starts reuse this)
-let appInitialized = false;
-const appPromise = NestFactory.create(AppModule, adapter).then(async (app) => {
-  app.enableCors();
+// Initialize once and reuse across warm invocations
+const appPromise = NestFactory.create(AppModule, adapter, {
+  bodyParser: false, // Better Auth handles its own body parsing
+}).then(async (app) => {
+  app.enableCors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  });
   await app.init();
-  appInitialized = true;
   return expressApp;
 });
 
